@@ -110,10 +110,10 @@ checkcms() {
 
 printf "\e[1;77m [*] Detecting CMS...\e[0m\n"
 
-checkjoomla=$(curl --socks5-hostname 127.0.0.1:9050 -s "$site/administrator/index.php" | grep -o "joomla" | head -n 1)
-checkwp=$(curl --socks5-hostname 127.0.0.1:9050 -s "$site/wp-login.php" | grep -o "wordpress" | head -n 1)
-checkdrupal=$(curl --socks5-hostname 127.0.0.1:9050 -s "$site/user/login" | grep -o "drupal" | head -n 1)
-checkopencart=$(curl --socks5-hostname 127.0.0.1:9050 -s "$site/admin/index.php" | grep -o "opencart" | head -n 1)
+checkjoomla=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/administrator/index.php" | grep -o "joomla" | head -n 1)
+checkwp=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/wp-login.php" | grep -o "wordpress" | head -n 1)
+checkdrupal=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/user/login" | grep -o "drupal" | head -n 1)
+checkopencart=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/admin/index.php" | grep -o "opencart" | head -n 1)
 
 if [[ $checkjoomla == "joomla" ]]; then
 printf "\e[1;92m [*] Joomla detected!\e[0m\n"

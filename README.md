@@ -24,7 +24,7 @@ service tor start
 sudo ./brutecms.sh
 ```
 
-### Remuse:
+### Resume:
 ```
 sudo ./brutecms.sh --resume
 ```

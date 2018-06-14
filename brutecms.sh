@@ -45,10 +45,10 @@ printf "\n"
 function start() {
 
 default_wl_pass="passwords.lst"
-read -p $'\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m][*] Password List (Enter to default list): \e[0m' wl_pass
+read -p $'\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Password List (Enter to default list): \e[0m' wl_pass
 wl_pass="${wl_pass:-${default_wl_pass}}"
 default_threads="5"
-read -p $'\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m][*] Threads (Default: 5): \e[0m' threads
+read -p $'\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Threads (Default: 5): \e[0m' threads
 threads="${threads:-${default_threads}}"
 
 }

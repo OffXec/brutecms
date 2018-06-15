@@ -110,12 +110,12 @@ checkcms() {
 
 printf "\e[1;77m [*] Detecting CMS...\e[0m\n"
 
-checkjoomla=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/administrator/index.php" | grep -o "joomla" | head -n 1)
+checkjoomla=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/administrator/index.php" | grep -o 'joomla\|Joomla!\|script type=\"text javascript\" src=\"media system js mootools.js\"\|com_content' | head -n 1)
 checkwp=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/wp-login.php" | grep -o 'wordpress\|wp-content' | head -n 1)
-checkdrupal=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/user/login" | grep -o "drupal" | head -n 1)
-checkopencart=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/admin/index.php" | grep -o "opencart" | head -n 1)
+checkdrupal=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/user/login" | grep -o 'drupal\|drupal.org\|sites all\|Drupal' | head -n 1)
+checkopencart=$(curl --socks5-hostname 127.0.0.1:9050 -L -s "$site/admin/index.php" | grep -o 'opencart\|Opencart\|route=product\|route=common\|catalog view theme' | head -n 1)
 
-if [[ $checkjoomla == "joomla" ]]; then
+if [[ $checkjoomla == "joomla" ]] || [[ $checkjoomla == "Joomla!" ]] || [[ $checkjoomla == *'script type="text javascript" src="media system js mootools.js"'* ]] || [[ $checkjoomla == "com_content" ]]; then
 printf "\e[1;92m [*] Joomla detected!\e[0m\n"
 start
 default_user="admin"
@@ -126,15 +126,15 @@ elif [[ $checkwp == "wordpress" ]] || [[ $checkwp == "wp-content" ]] ; then
 printf "\e[1;92m [*] WordPress detected!\e[0m\n"
 start
 wp
-elif [[ $checkdrupal == "drupal" ]]; then
+elif [[ $checkdrupal == "drupal" ]] || [[ $checkdrupal == "drupal.org" ]] || [[ $checkdrupal == "sites all" ]] || [[ $checkdrupal == "Drupal" ]]; then
 printf "\e[1;92m [*] Drupal detected!\e[0m\n"
 start
 default_user="admin"
 read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user
 user="${user:-${default_user}}"
 drupal
-elif [[ $checkopencart == "opencart" ]]; then
-printf "\e[1;92m [*] Opencart detected!\e[0m\n"
+elif [[ $checkopencart == "opencart" ]] || [[ $checkopencart == "OpenCart" ]] || [[ $checkopencart == "route=product" ]] || [[ $checkopencart == "catalog view theme" ]] || [[ $checkopencart == "route=common" ]]; then
+printf "\e[1;92m [*] OpenCart detected!\e[0m\n"
 start
 default_user="admin"
 read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user

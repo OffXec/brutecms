@@ -119,7 +119,7 @@ if [[ $checkjoomla == "joomla" ]] || [[ $checkjoomla == "Joomla!" ]] || [[ $chec
 printf "\e[1;92m [*] Joomla detected!\e[0m\n"
 start
 default_user="admin"
-read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user
+read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
 user="${user:-${default_user}}"
 joomla
 elif [[ $checkwp == "wordpress" ]] || [[ $checkwp == "wp-content" ]] ; then
@@ -130,14 +130,14 @@ elif [[ $checkdrupal == "drupal" ]] || [[ $checkdrupal == "drupal.org" ]] || [[ 
 printf "\e[1;92m [*] Drupal detected!\e[0m\n"
 start
 default_user="admin"
-read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user
+read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
 user="${user:-${default_user}}"
 drupal
 elif [[ $checkopencart == "opencart" ]] || [[ $checkopencart == "OpenCart" ]] || [[ $checkopencart == "route=product" ]] || [[ $checkopencart == "catalog view theme" ]] || [[ $checkopencart == "route=common" ]]; then
 printf "\e[1;92m [*] OpenCart detected!\e[0m\n"
 start
 default_user="admin"
-read -p $'\e[1;77m[*] User (Default: \e[0m'$default_user'): ' user
+read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
 user="${user:-${default_user}}"
 opencart
 else
@@ -192,9 +192,6 @@ exit 1
 function joomla() {
 cms="joomla"
 count_pass=$(wc -l $wl_pass | cut -d " " -f1)
-default_user="admin"
-read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
-user="${user:-${default_user}}"
 printf "\e[1;92m[*] Username:\e[0m\e[1;77m %s\e[0m\n" $user
 printf "\e[1;92m[*] Wordlist:\e[0m\e[1;77m %s (%s)\e[0m\n" $wl_pass $count_pass
 printf "\e[1;91m[*] Press Ctrl + C to stop or save session\n\e[0m"
@@ -227,9 +224,6 @@ exit 1
 function drupal() {
 cms="drupal"
 count_pass=$(wc -l $wl_pass | cut -d " " -f1)
-default_user="admin"
-read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
-user="${user:-${default_user}}"
 printf "\e[1;92m[*] Username:\e[0m\e[1;77m %s\e[0m\n" $user
 printf "\e[1;92m[*] Wordlist:\e[0m\e[1;77m %s (%s)\e[0m\n" $wl_pass $count_pass
 printf "\e[1;91m[*] Press Ctrl + C to stop or save session\n\e[0m"
@@ -261,9 +255,6 @@ exit 1
 function opencart() {
 cms="opencart"
 count_pass=$(wc -l $wl_pass | cut -d " " -f1)
-default_user="admin"
-read -p $'\e[1;92m[*] Username (Default: admin): \e[0m' user
-user="${user:-${default_user}}"
 printf "\e[1;92m[*] Username:\e[0m\e[1;77m %s\e[0m\n" $user
 printf "\e[1;92m[*] Wordlist:\e[0m\e[1;77m %s (%s)\e[0m\n" $wl_pass $count_pass
 printf "\e[1;91m[*] Press Ctrl + C to stop or save session\n\e[0m"
